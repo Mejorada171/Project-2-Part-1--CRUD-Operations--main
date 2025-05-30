@@ -1,0 +1,186 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Countries API",
+    "version": "1.0.0",
+    "description": "API for managing country data, including CRUD operations."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local server"
+    },
+    {
+      "url": "https://project-2-part-1-crud-operations.onrender.com",
+      "description": "Production server"
+    }
+  ],
+  
+  "tags": [
+    {
+      "name": "Countries",
+      "description": "Operations related to countries"
+    }
+  ],
+  "paths": {
+    "/api/countries": {
+      "get": {
+        "tags": ["Countries"],
+        "summary": "Retrieve all countries",
+        "responses": {
+          "200": {
+            "description": "A list of countries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Country" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Countries"],
+        "summary": "Create a new country",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Country" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Country created successfully" },
+          "400": { "description": "Invalid input" }
+        }
+      }
+    },
+    "/api/countries/{id}": {
+      "get": {
+        "tags": ["Countries"],
+        "summary": "Retrieve a country by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Country details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Country" }
+              }
+            }
+          },
+          "404": { "description": "Country not found" }
+        }
+      },
+      "put": {
+        "tags": ["Countries"],
+        "summary": "Update a country by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Country" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Country updated successfully" },
+          "400": { "description": "Invalid input" },
+          "404": { "description": "Country not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Countries"],
+        "summary": "Delete a country by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Country deleted successfully" },
+          "404": { "description": "Country not found" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Country": {
+        "type": "object",
+        "required": ["country", "capital", "region", "population", "president", "currency", "language", "independent"],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the country"
+          },
+          "country": {
+            "type": "string",
+            "description": "Name of the country"
+          },
+          "capital": {
+            "type": "string",
+            "description": "Capital city of the country"
+          },
+          "region": {
+            "type": "string",
+            "description": "Geographical region"
+          },
+          "population": {
+            "type": "integer",
+            "description": "Population count"
+          },
+          "president": {
+            "type": "string",
+            "description": "Name of the president"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Official currency"
+          },
+          "language": {
+            "type": "string",
+            "description": "Official language"
+          },
+          "independent": {
+            "type": "boolean",
+            "description": "Independence status"
+          }
+        },
+        "example": {
+          "_id": "6831276663f8f665e08d7dbb",
+          "country": "Japan",
+          "capital": "Tokyo",
+          "region": "Asia",
+          "population": 125800000,
+          "president": "Shigeru Ishiba",
+          "currency": "Japanese Yen",
+          "language": "Japanese",
+          "independent": true
+        }
+      }
+    }
+  }
+}
+
