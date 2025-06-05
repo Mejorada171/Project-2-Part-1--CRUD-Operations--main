@@ -1,7 +1,6 @@
 const { Schema, model } = require('mongoose');
 
 const countrySchema = new Schema({
-  _id: String,
   country: { type: String, required: true },
   capital: { type: String, required: true },
   region: String,
@@ -10,6 +9,6 @@ const countrySchema = new Schema({
   currency: String,
   language: String,
   independent: Boolean
-});
+}, {collection: 'countries'});
 
-module.exports = model('Country', countrySchema);
+module.exports = model('countries', countrySchema);

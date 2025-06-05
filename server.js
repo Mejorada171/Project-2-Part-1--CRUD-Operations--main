@@ -4,10 +4,12 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerDoc = require('./swagger.json');
 
 const countryRoutes = require('./routes/countries');
 const app = express();
-mongoose.connect(process.env.MONGO_URI)
+
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error(err.message));
 
@@ -19,6 +21,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/countries', countryRoutes);
+
 
 app.use((err, _, res, __) => {          // global error handler
   res.status(err.status || 500).json({ message: err.message });
@@ -50,8 +53,10 @@ const swaggerOptions = {
   apis: ['./routes/*.js'] // Adjust the path to your route files
 };
 
+
+
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 // Your existing routes and middleware

@@ -1,10 +1,27 @@
+const { default: mongoose } = require('mongoose');
 const Country = require('../models/country');
 const { validationResult } = require('express-validator');
 
-exports.getAll = async (_, res) => res.json(await Country.find());
+// exports.getAll = async (_, res) => res.json(await Country.find());
+
+exports.getAll = async (req, res) => { 
+  try {
+    const countries = await Country.find();
+    res.status(200).json(countries);
+  } catch (error) {
+    console.error('Error fetching countries:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
 exports.getOne = async (req, res) => {
-  const item = await Country.findById(req.params.id);
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    throw new Error('Invalid ID format');
+  }
+
+  const objectId = new mongoose.Types.ObjectId(req.params.id);
+  console.log('Fetching country with ID:', req.params.id);
+  const item = await Country.findOne({_id: req.params.id});
   if (!item) return res.status(404).json({ message: 'Not found' });
   res.json(item);
 };
@@ -23,7 +40,6 @@ exports.update = async (req, res) => {
 };
 
 exports.remove = async (req, res) => {
-swagger.tags = ['Countries']  
 const item = await Country.findByIdAndDelete(req.params.id);
   if (!item) return res.status(404).json({ message: 'Not found' });
   res.json({ message: 'Deleted' });
