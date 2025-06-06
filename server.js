@@ -5,9 +5,11 @@ const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerDoc = require('./swagger.json');
+const userRoutes = require('./routes/userRoutes');
 
 const countryRoutes = require('./routes/countries');
 const app = express();
+app.use('/api/users', userRoutes);
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))

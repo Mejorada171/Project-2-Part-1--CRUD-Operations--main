@@ -3,7 +3,7 @@
   "info": {
     "title": "Countries API",
     "version": "1.0.0",
-    "description": "API for managing country data, including CRUD operations."
+    "description": "API for managing country and user data, including CRUD operations."
   },
   "servers": [
     {
@@ -15,11 +15,14 @@
       "description": "Production server"
     }
   ],
-  
   "tags": [
     {
       "name": "Countries",
       "description": "Operations related to countries"
+    },
+    {
+      "name": "Users",
+      "description": "Operations related to users"
     }
   ],
   "paths": {
@@ -123,6 +126,107 @@
           "404": { "description": "Country not found" }
         }
       }
+    },
+    "/api/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Retrieve all users",
+        "responses": {
+          "200": {
+            "description": "A list of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/User" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/User" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "User created successfully" },
+          "400": { "description": "Invalid input" }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Retrieve a user by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/User" }
+              }
+            }
+          },
+          "404": { "description": "User not found" }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update a user by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/User" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "User updated successfully" },
+          "400": { "description": "Invalid input" },
+          "404": { "description": "User not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete a user by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "User deleted successfully" },
+          "404": { "description": "User not found" }
+        }
+      }
     }
   },
   "components": {
@@ -135,52 +239,38 @@
             "type": "string",
             "description": "Unique identifier for the country"
           },
-          "country": {
-            "type": "string",
-            "description": "Name of the country"
-          },
-          "capital": {
-            "type": "string",
-            "description": "Capital city of the country"
-          },
-          "region": {
-            "type": "string",
-            "description": "Geographical region"
-          },
-          "population": {
-            "type": "integer",
-            "description": "Population count"
-          },
-          "president": {
-            "type": "string",
-            "description": "Name of the president"
-          },
-          "currency": {
-            "type": "string",
-            "description": "Official currency"
-          },
-          "language": {
-            "type": "string",
-            "description": "Official language"
-          },
-          "independent": {
-            "type": "boolean",
-            "description": "Independence status"
-          }
-        },
-        "example": {
-          "_id": "6831276663f8f665e08d7dbb",
-          "country": "Japan",
-          "capital": "Tokyo",
-          "region": "Asia",
-          "population": 125800000,
-          "president": "Shigeru Ishiba",
-          "currency": "Japanese Yen",
-          "language": "Japanese",
-          "independent": true
+          "country": { "type": "string" },
+          "capital": { "type": "string" },
+          "region": { "type": "string" },
+          "population": { "type": "integer" },
+          "president": { "type": "string" },
+          "currency": { "type": "string" },
+          "language": { "type": "string" },
+          "independent": { "type": "boolean" }
         }
-      }
+      },
+      "User": {
+  "type": "object",
+  "required": ["firstName", "lastName", "country"],
+  "properties": {
+    "_id": {
+      "type": "string",
+      "description": "Unique identifier for the user"
+    },
+    "firstName": {
+      "type": "string",
+      "description": "User's first name"
+    },
+    "lastName": {
+      "type": "string",
+      "description": "User's last name"
+    },
+    "country": {
+      "type": "string",
+      "description": "Country the user belongs to"
     }
   }
 }
-
+    }
+  }
+}
