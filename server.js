@@ -17,6 +17,24 @@ mongoose.connect(process.env.MONGODB_URI)
 app.use(cors());
 app.use(express.json());
 
+const session = require('express-session');
+const passport = require('passport');
+require('dotenv').config();
+require('./auth/passport');
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Add route
+const authRoutes = require('./routes/authRoutes');
+app.use('/auth', authRoutes);
+
 app.get('/', (req, res) => {
   res.send('Welcome to the Countries API');
 });
