@@ -9,7 +9,6 @@ const userRoutes = require('./routes/userRoutes');
 
 const countryRoutes = require('./routes/countries');
 const app = express();
-app.use('/api/users', userRoutes);
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
@@ -23,7 +22,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/countries', countryRoutes);
-
+app.use('/api/users', userRoutes);
 
 app.use((err, _, res, __) => {          // global error handler
   res.status(err.status || 500).json({ message: err.message });

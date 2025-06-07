@@ -29,16 +29,24 @@ exports.getUserById = async (req, res) => {
 
 // Create a new user
 exports.createUser = async (req, res) => {
-      console.log(req.body); // Add this line for debugging
+  console.log(req.body); // Helpful for debugging
+
   const { firstName, lastName, country } = req.body;
-  const user = new User({ firstName, lastName, country });
+
+  // Generate a new ObjectId manually
+  const _id = new mongoose.Types.ObjectId();
+
+  const user = new User({ _id, firstName, lastName, country });
+
   try {
     const newUser = await user.save();
     res.status(201).json(newUser);
   } catch (err) {
+    console.error(err); // Helpful for debugging server-side
     res.status(400).json({ message: err.message });
   }
 };
+
 
 // Update a user by ID
 exports.updateUser = async (req, res) => {
