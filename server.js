@@ -35,6 +35,7 @@ app.use(passport.session());
 const authRoutes = require('./routes/authRoutes');
 app.use('/auth', authRoutes);
 
+
 app.get('/', (req, res) => {
   res.send('Welcome to the Countries API');
 });
